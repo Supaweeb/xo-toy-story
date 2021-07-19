@@ -1,0 +1,30 @@
+.xo-button {
+  display: inline-block;
+  margin: 10px;
+  border-style: solid;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+}
+
+.game-name {
+  text-align: center;
+  color: black;
+  font-size: 500%;
+  padding: 20px 30px 20px 30px;
+  background-color: gray;
+  border: 2px solid white;
+  border-radius: 20px;
+}
+
+.game-button {
+  text-align: center;
+  color: black;
+  font-size: 500%;
+  width: 100%;
+  margin: 10px;
+  padding: 20px 30px 20px 30px;
+  background-color: gray;
+  border: 2px solid white;
+  border-radius: 20px;
+}
