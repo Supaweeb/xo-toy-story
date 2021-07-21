@@ -206,7 +206,9 @@ class App extends Component {
     this.setState({ table: table }, () => this.setState({ store: [] }))
   }
 
-  handdleSubmit = () => {}
+  handdleSubmit = () => {
+    
+  }
 
   storeSeqPlay = (i, j, player) => {
     let payload = this.state.store
