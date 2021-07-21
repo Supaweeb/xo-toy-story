@@ -5,15 +5,36 @@ import { Container, Row, Col, Button } from 'reactstrap'
 class App extends Component {
   constructor (props) {
     super(props)
-    let x = 3
-    let y = 3
+    let x = props.x
+    let y = props.y
     this.state = {
       size: { x, y },
       turn: 'X',
       table: [...Array(x)].map(e => Array(y).fill(undefined)),
       isEndGame: false,
-      message: 'Welcome'
+      message: 'Welcome',
+      count: 3,
+      store: []
     }
+  }
+
+  isEqual = (table1, table2, table3) => {
+    if (table1 === table2 && table1 === table3) {
+      return true
+    }
+    return false
+  }
+
+  componentDidUpdate () {
+    this.state.isEndGame
+      ? (document.getElementById('overlay').style.display = 'block')
+      : (document.getElementById('overlay').style.display = 'none')
+  }
+
+  toggleOverlay = () => {
+    this.setState({ isEndGame: !this.state.isEndGame }, () =>
+      this.setState({ turn: 'X' })
+    )
   }
 
   winnerCondition = checkTable => {
@@ -25,7 +46,7 @@ class App extends Component {
         try {
           if (
             checkTable[i][j] === checkTable[i][j + 1] &&
-            checkTable[i][j + 1] === checkTable[i][j + 2]
+            checkTable[i][j] === checkTable[i][j + 2]
           ) {
             return checkTable[i][j]
           }
@@ -84,7 +105,7 @@ class App extends Component {
     }
     let board = this.state.table
     board[move.i][move.j] = 'O' // ai play
-    this.check()
+    this.storeSeqPlay(move.i, move.j, 'O')
   }
 
   minimax = (rtable, depth, alpha, beta, isMaximize) => {
@@ -105,10 +126,9 @@ class App extends Component {
       return scores[result]
     }
 
-    // console.log(depth)
-    // if (depth === 9) {
-    //   return -depth
-    // }
+    if (depth === 1) {
+      return depth
+    }
 
     if (isMaximize) {
       let bestScore = -Infinity
@@ -150,12 +170,12 @@ class App extends Component {
   nextTurn = () => {
     if (this.state.turn === 'X') {
       // ai play as O
-      return this.setState({ turn: 'O' }, () =>
-        setTimeout(() => {
-          this.aiBotPlay()
-        }, 200)
-      )
-      // return this.setState({ turn: 'O' }) // player 2 play
+      // return this.setState({ turn: 'O' }, () =>
+      //   setTimeout(() => {
+      //     this.aiBotPlay()
+      //   }, 200)
+      // )
+      return this.setState({ turn: 'O' }) // player 2 play
     }
     return this.setState({ turn: 'X' })
   }
@@ -177,11 +197,31 @@ class App extends Component {
     let playedTable = this.state.table
     if (playedTable[i][j] === undefined) {
       playedTable[i][j] = this.state.turn
-      this.setState({ table: playedTable }, () => this.check())
+      this.setState({ table: playedTable }, () =>
+        this.storeSeqPlay(i, j, this.state.turn)
+      )
     }
   }
 
+  gameRestart = () => {
+    let table = this.state.table
+    table = [...Array(this.state.size.x)].map(e =>
+      Array(this.state.size.y).fill(undefined)
+    )
+    this.setState({ table: table }, () => this.setState({ store: [] }))
+  }
+
+  handdleSubmit = () => {}
+
+  storeSeqPlay = (i, j, player) => {
+    let payload = this.state.store
+    payload.push({ i: i, j: j, player: player })
+    this.setState({ store: payload }, () => this.check())
+    // set to axios on click hanndleSubmit
+  }
+
   renderXO = () => {
+    let h = window.innerHeight/2
     let xoTable = []
     for (let index = 0; index < this.state.size.x; index++) {
       for (let jindex = 0; jindex < this.state.size.y; jindex++) {
@@ -189,8 +229,11 @@ class App extends Component {
           ? xoTable.push(
               <Button
                 className='xo-button'
-                id='xo-button'
                 color='info'
+                style={{
+                  width: h / this.state.size.x,
+                  height: h / this.state.size.x
+                }}
                 onClick={() => this.handdleClick(index, jindex)}
               >
                 {this.state.table[index][jindex]}
@@ -200,8 +243,11 @@ class App extends Component {
           ? xoTable.push(
               <Button
                 className='xo-button'
-                id='xo-button'
                 color='warning'
+                style={{
+                  width: h / this.state.size.x,
+                  height: h / this.state.size.x
+                }}
                 onClick={() => this.handdleClick(index, jindex)}
               >
                 {this.state.table[index][jindex]}
@@ -210,8 +256,12 @@ class App extends Component {
           : xoTable.push(
               <Button
                 className='xo-button'
-                id='xo-button'
+                outline
                 color='secondary'
+                style={{
+                  width: h / this.state.size.x,
+                  height: h / this.state.size.x
+                }}
                 disabled={this.state.isEndGame}
                 onClick={() => this.handdleClick(index, jindex)}
               >
@@ -226,21 +276,37 @@ class App extends Component {
 
   render () {
     return (
-      <Container
-        className='border-xo'
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'column',
-          alignItems: 'center',
-          backgroundImage:
-            'url("https://media.istockphoto.com/vectors/digital-technology-gaming-abstract-background-vector-id1164222265?k=6&m=1164222265&s=170667a&w=0&h=ixQIWmB43PjPjgXSuxMdhLkV-V245Q8EZ_MmcLUOsOk=")'
-        }}
-      >
+      <Container className='container'>
         <Row>
-          <Col>{this.renderXO()}</Col>
+          <Col className='xo-bg'>{this.renderXO()}</Col>
         </Row>
-        <div className='overlay'>{this.state.message}</div>
+        <Row>
+          <Col>
+            <div className='footer-ingame-menu'>
+              <Button
+                color='danger'
+                size='lg'
+                onClick={() => this.gameRestart()}
+              >
+                Restart
+              </Button>
+              <Button
+                color='success'
+                onClick={() => this.handdleSubmit()}
+                size='lg'
+              >
+                Save
+              </Button>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div id='overlay' onClick={() => this.toggleOverlay()}>
+              {this.state.message}
+            </div>
+          </Col>
+        </Row>
       </Container>
     )
   }
