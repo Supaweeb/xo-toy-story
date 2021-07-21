@@ -1,6 +1,9 @@
 import { Component } from 'react'
 import '../style.css'
-import { Container, Row, Col, Button } from 'reactstrap'
+import { Container, Row, Col, Button, Input } from 'reactstrap'
+import GamePage from './game'
+
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 class App extends Component {
   constructor (props) {
@@ -8,43 +11,77 @@ class App extends Component {
     this.state = {}
   }
 
+  GamePage = () => {
+    return <GamePage x={5} y={5} />
+  }
+
+  hiddenMenu = e => {
+    console.log(window.location.pathname)
+    document.getElementsByClassName('game-button')[0].style.display = 'none'
+  }
+
   render () {
     return (
-      <Container
-        className='border-xo'
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'column',
-          alignItems: 'center',
-          minHeight: '100%',
-          minWidth: '100%',
-          backgroundSize: 'auto',
-          position: 'fixed',
-          backgroundImage:
-            'url("https://media.istockphoto.com/vectors/digital-technology-gaming-abstract-background-vector-id1164222265?k=6&m=1164222265&s=170667a&w=0&h=ixQIWmB43PjPjgXSuxMdhLkV-V245Q8EZ_MmcLUOsOk=")'
-        }}
-      >
-        {/* <Row>
-          <Col>{this.renderXO()}</Col>
-        </Row>
-        <Row>
-          <Col>
-            <div style={{ color: 'white' }}>{this.state.message}</div>
-          </Col>
-        </Row> */}
-        <Row>
-          <Col>
-            <p className='game-name'>Tic-tac-toe Game</p>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Button className='game-button'>Play Game</Button>
-            <Button className='game-button'>How to play</Button>
-          </Col>
-        </Row>
-      </Container>
+      <Router>
+        <Container className='border-xo'>
+          <Row>
+            <Col>
+              <p className='game-name'>Tic-tac-toe Game</p>
+            </Col>
+          </Row>
+          <Row>
+            <div className='menu-button'>
+              {window.location.pathname === '/' ? (
+                <Col>
+                  {/* <div className='size-input'>
+                    <p>Game size</p>
+                    <Input
+                      type='number'
+                      name='number'
+                      id="input-button"
+                      placeholder='3'
+                    />
+                    <p>x</p>
+                    <Input
+                      type='number'
+                      name='number'
+                      id="input-button"
+                      placeholder='3'
+                    />
+                  </div> */}
+                  <Button className='game-button' href='/game' size='lg'>
+                    Play game{' '}
+                  </Button>
+                  <Button className='game-button' size='lg'>
+                    Replay
+                  </Button>
+                  <Button className='game-button' href='/' size='lg'>
+                    How to play
+                  </Button>
+                  <Button className='game-button' href='/game' size='lg'>
+                    Setting
+                  </Button>
+                </Col>
+              ) : (
+                <Col className='ingame-button'>
+                  <Button
+                    className='game-button'
+                    color='info'
+                    href='/'
+                    size='lg'
+                  >
+                    Menu
+                  </Button>
+                </Col>
+              )}
+            </div>
+          </Row>
+          <Row>
+            <Route exact path='/' component={this.Home} />
+            <Route path='/game' component={this.GamePage} />
+          </Row>
+        </Container>
+      </Router>
     )
   }
 }
