@@ -97,8 +97,14 @@ class App extends Component {
     }
 
     if (result != null) {
-      return scores[result] - depth
+      if (result === 'O') {
+        return scores[result] + depth
+      } else if (result === 'X') {
+        return scores[result] - depth
+      }
+      return scores[result]
     }
+
     // console.log(depth)
     // if (depth === 9) {
     //   return -depth
@@ -147,7 +153,7 @@ class App extends Component {
       return this.setState({ turn: 'O' }, () =>
         setTimeout(() => {
           this.aiBotPlay()
-        }, 250)
+        }, 200)
       )
       // return this.setState({ turn: 'O' }) // player 2 play
     }
@@ -234,11 +240,7 @@ class App extends Component {
         <Row>
           <Col>{this.renderXO()}</Col>
         </Row>
-        <Row>
-          <Col>
-            <div style={{ color: 'white' }}>{this.state.message}</div>
-          </Col>
-        </Row>
+        <div className='overlay'>{this.state.message}</div>
       </Container>
     )
   }
