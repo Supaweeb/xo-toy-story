@@ -11,19 +11,20 @@ class App extends Component {
     this.state = {
       settingModal: false,
       gamePlay: false,
-      size: { x: 3, y: 3 }
+      size: { x: 3, y: 3 },
+      ai: false,
+      selectMode: false
     }
   }
 
-  componentDidUpdate () {
-  }
+  componentDidUpdate () {}
 
   toggleSetting = () => {
     this.setState({ settingModal: !this.state.settingModal })
   }
 
-  GamePage = () => {
-    return <GamePage />
+  onSelectMode = e => {
+    this.setState({ ai: e, gamePlay: true })
   }
 
   onSave = e => {
@@ -47,30 +48,13 @@ class App extends Component {
           </Row>
           <Row>
             <div className='menu-button'>
-              {!this.state.gamePlay ? (
+              {!this.state.selectMode && !this.state.gamePlay ? (
                 <Col>
-                  {/* <div className='size-input'>
-                    <p>Game size</p>
-                    <Input
-                      type='number'
-                      name='number'
-                      id="input-button"
-                      placeholder='3'
-                    />
-                    <p>x</p>
-                    <Input
-                      type='number'
-                      name='number'
-                      id="input-button"
-                      placeholder='3'
-                    />
-                  </div> */}
                   <Button
                     className='game-button'
-                    // href='/game'
                     size='lg'
                     color='danger'
-                    onClick={() => this.setState({ gamePlay: true })}
+                    onClick={() => this.setState({ selectMode: true })}
                   >
                     Play game
                   </Button>
@@ -97,13 +81,33 @@ class App extends Component {
               ) : null}
             </div>
           </Row>
-          {/* <Row>
-            <Route exact path='/' component={this.Home} />
-            <Route path='/game' component={this.GamePage} />
-          </Row> */}
           <Row>
-            {this.state.gamePlay ? <GamePage size={this.state.size} /> : null}
+            {this.state.selectMode && !this.state.gamePlay ? (
+              <Col className="game-mode">
+                <Button
+                  className='game-button'
+                  size='lg'
+                  color='success'
+                  onClick={() => this.onSelectMode(false)}
+                >
+                  Player vs Player
+                </Button>
+                <Button
+                  className='game-button'
+                  size='lg'
+                  color='warning'
+                  onClick={() => this.onSelectMode(true)}
+                >
+                  Player vs Computer
+                </Button>
+              </Col>
+            ) : null}
           </Row>
+          {this.state.gamePlay  ? (
+            <Row>
+              <GamePage size={this.state.size} ai={this.state.ai} />
+            </Row>
+          ) : null}
         </Container>
         {this.state.settingModal ? (
           <SettingPage

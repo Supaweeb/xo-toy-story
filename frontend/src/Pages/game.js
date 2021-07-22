@@ -16,8 +16,13 @@ class App extends Component {
       isEndGame: false,
       message: 'Welcome',
       count: 3,
-      store: []
+      store: [],
+      ai: false
     }
+  }
+
+  componentDidMount () {
+    this.setState({ ai: this.props.ai })
   }
 
   toggleSetting = () => {
@@ -181,12 +186,13 @@ class App extends Component {
   nextTurn = () => {
     if (this.state.turn === 'X') {
       // ai play as O
-      // return this.setState({ turn: 'O' }, () =>
-      //   setTimeout(() => {
-      //     this.aiBotPlay()
-      //   }, 200)
-      // )
-      return this.setState({ turn: 'O' }) // player 2 play
+      return this.state.ai
+        ? this.setState({ turn: 'O' }, () =>
+            setTimeout(() => {
+              this.aiBotPlay()
+            }, 200)
+          )
+        : this.setState({ turn: 'O' }) // player 2 play
     }
     return this.setState({ turn: 'X' })
   }
@@ -246,6 +252,7 @@ class App extends Component {
                   height: h / this.state.size.x
                 }}
                 onClick={() => this.handdleClick(index, jindex)}
+                key={`${index}${jindex}`}
               >
                 {this.state.table[index][jindex]}
               </Button>
@@ -260,6 +267,7 @@ class App extends Component {
                   height: h / this.state.size.x
                 }}
                 onClick={() => this.handdleClick(index, jindex)}
+                key={`${index}${jindex}`}
               >
                 {this.state.table[index][jindex]}
               </Button>
@@ -275,6 +283,7 @@ class App extends Component {
                 }}
                 disabled={this.state.isEndGame}
                 onClick={() => this.handdleClick(index, jindex)}
+                key={`${index}${jindex}`}
               >
                 {this.state.table[index][jindex]}
               </Button>

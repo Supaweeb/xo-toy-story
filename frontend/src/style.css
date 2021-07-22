@@ -54,7 +54,7 @@
   width: 120%;
   top: -120px;
   position: absolute;
-  z-index: 99;
+  z-index: 3;
 }
 
 .below-game-name {
@@ -120,7 +120,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
+  z-index: 99;
   cursor: pointer;
 }
 
@@ -148,4 +148,14 @@
   height: 30px;
   width: 30px;
   align-items: center;
+}
+
+.game-mode > .game-button {
+  display: block;
+  /* margin-bottom: 10px; */
+  top: -30px;
+  position: relative;
+  text-align: center;  
+  margin:auto;
+  margin-bottom: 10px;
 }
