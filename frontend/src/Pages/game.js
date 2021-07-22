@@ -1,13 +1,15 @@
 import { Component } from 'react'
 import '../style.css'
 import { Container, Row, Col, Button } from 'reactstrap'
+import SettingPage from '../Component/setting'
 
 class App extends Component {
   constructor (props) {
     super(props)
-    let x = props.x
-    let y = props.y
+    let x = props.size.x
+    let y = props.size.y
     this.state = {
+      settingModal: false,
       size: { x, y },
       turn: 'X',
       table: [...Array(x)].map(e => Array(y).fill(undefined)),
@@ -16,6 +18,15 @@ class App extends Component {
       count: 3,
       store: []
     }
+  }
+
+  toggleSetting = () => {
+    this.setState({ settingModal: !this.state.settingModal })
+  }
+
+  onSave = e => {
+    this.toggleSetting()
+    this.setState({ size: e }, () => this.gameRestart())
   }
 
   isEqual = (table1, table2, table3) => {
@@ -208,7 +219,7 @@ class App extends Component {
     table = [...Array(this.state.size.x)].map(e =>
       Array(this.state.size.y).fill(undefined)
     )
-    this.setState({ table: table }, () => this.setState({ store: [] }))
+    this.setState({ table: table, store: [] })
   }
 
   handdleSubmit = () => {}
@@ -221,7 +232,7 @@ class App extends Component {
   }
 
   renderXO = () => {
-    let h = window.innerHeight/2
+    let h = window.innerHeight / 2
     let xoTable = []
     for (let index = 0; index < this.state.size.x; index++) {
       for (let jindex = 0; jindex < this.state.size.y; jindex++) {
@@ -278,11 +289,15 @@ class App extends Component {
     return (
       <Container className='container'>
         <Row>
-          <Col className='xo-bg'>{this.renderXO()}</Col>
-        </Row>
-        <Row>
           <Col>
             <div className='footer-ingame-menu'>
+              <Button
+                color='primary'
+                size='lg'
+                onClick={() => (window.location.pathname = '/')}
+              >
+                Menu
+              </Button>
               <Button
                 color='danger'
                 size='lg'
@@ -302,11 +317,29 @@ class App extends Component {
         </Row>
         <Row>
           <Col>
+            <div style={{ position: 'relative' }}>
+              <p className='text-turn'>{this.state.turn} Turn</p>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className='xo-bg'>{this.renderXO()}</div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
             <div id='overlay' onClick={() => this.toggleOverlay()}>
               {this.state.message}
             </div>
           </Col>
         </Row>
+        {this.state.settingModal ? (
+          <SettingPage
+            toggleSetting={this.toggleSetting}
+            onSave={this.onSave}
+          />
+        ) : null}
       </Container>
     )
   }

@@ -1,5 +1,7 @@
 * {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Impact, fantasy;
+  padding: 0px;
+  margin: 0px;
 }
 
 .container {
@@ -34,27 +36,38 @@
 
 .game-name {
   text-align: center;
-  color: white;
-  font-size: 500%;
+  color: #f7dd39;
+  font-size: 150px;
   padding: 20px 30px 20px 30px;
-  background-color: gray;
+  top: -60px;
+  -webkit-text-stroke: 6px;
+  -webkit-text-stroke-color: #225a8f;
+  position: relative;
+  /* background-color: gray;
   border: 2px solid white;
-  border-radius: 20px;
+  border-radius: 20px; */
+}
+.bg-below-game-name {
+  background-color: red;
+  height: 60px;
+  left: -10%;
+  width: 120%;
+  top: -120px;
+  position: absolute;
+  z-index: 99;
+}
+
+.below-game-name {
+  text-align: center;
+  color: #f7dd39;
+  font-size: 80px;
+  position: relative;
+  top: -50px;
 }
 
 .game-button {
-  /* text-align: center;
-  color: black;
-  font-size: 500%;
-  width: 100%;
-  margin: 10px;
-  padding: 20px 30px 20px 30px;
-  background-color: gray;
-  border: 2px solid white;
-  border-radius: 20px; */
   display: flex;
   margin: 0px 10px 0px 10px;
-  opacity: 0.9;
 }
 
 .border-xo {
@@ -67,25 +80,30 @@
   height: 100%;
   width: 100%;
 
-  /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
-  background-size: auto;
+  background-size: cover;
 
   position: fixed;
-  background-image: url('./bg.jpeg');
+  background-image: url("./bg2.jpg");
 }
 
 .xo-bg {
+  align-self: center;
+  position: relative;
+  top: -70px;
   padding: 10px;
   border-radius: 20px;
   background-repeat: no-repeat;
-  background-size: auto;
-  background-image: url('xobg.jpg');
+  background-attachment: fixed;
+  background-position: center;
+  background-position-y: 100px;
+  background-size: cover;
+  /* background-image: url("https://coolwallpapers.me/picsup/1084504-toy-story.jpg"); */
 }
 
 .game-name:hover {
-  color: #fff;
+  color: #f7dd39;
   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff;
 }
 
@@ -96,6 +114,7 @@
   height: 100%;
   color: #fff;
   padding-top: 25%;
+  font-size: xx-large;
   /* left: 250px; */
   text-align: center;
   right: 0;
@@ -109,4 +128,24 @@
   display: flex;
   justify-content: space-between;
   margin: 10px;
+  position: relative;
+  bottom: 50px;
+}
+
+.text-turn {
+  position: relative;
+  top: -55px;
+  text-align: center;
+  color: #f7dd39;
+  font-size: 40px;
+  -webkit-text-stroke: 1px;
+  -webkit-text-stroke-color: #225a8f;
+}
+
+.setting-button {
+  position: absolute;
+  top: -25px;
+  height: 30px;
+  width: 30px;
+  align-items: center;
 }
