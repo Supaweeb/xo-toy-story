@@ -214,6 +214,7 @@ class App extends Component {
     let playedTable = this.state.table
     if (playedTable[i][j] === undefined) {
       playedTable[i][j] = this.state.turn
+      // payload.push({ i: i, j: j, player: playedTable[i][j] })
       this.setState({ table: playedTable }, () =>
         this.storeSeqPlay(i, j, this.state.turn)
       )
@@ -228,7 +229,9 @@ class App extends Component {
     this.setState({ table: table, store: [] })
   }
 
-  handdleSubmit = () => {}
+  handdleSubmit = () => {
+    console.log(this.state.store)
+  }
 
   storeSeqPlay = (i, j, player) => {
     let payload = this.state.store
