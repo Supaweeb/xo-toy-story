@@ -17,8 +17,6 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      toggle: props.toggleSetting,      
-      onSave: props.onSave,
       size: { x: 3, y: 3 }
     }
   }
@@ -47,7 +45,7 @@ class App extends Component {
     return (
       <Container>
         <Modal isOpen={true} toggle={this.state.toggle}>
-          <ModalHeader>Setting</ModalHeader>
+          <ModalHeader>Setting board size</ModalHeader>
           <ModalBody>
             <Form>
               <FormGroup row>

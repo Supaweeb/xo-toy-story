@@ -155,7 +155,50 @@
   /* margin-bottom: 10px; */
   top: -30px;
   position: relative;
-  text-align: center;  
-  margin:auto;
+  text-align: center;
+  margin: auto;
   margin-bottom: 10px;
+}
+
+.table-replay {
+  background-color: white;
+  position: relative;
+  top: -50px;
+}
+
+.back-menu {
+  margin: 10px;
+  position: relative;
+  display: flex;
+  text-align: center;
+  bottom: 50px;
+}
+
+.tbody-column {
+  position: relative;
+  width: 300px;
+  text-align: center;
+  font-size: large;
+}
+
+.thead-column {
+  position: relative;
+  width: 300px;
+  text-align: center;
+  font-size: x-large;
+  color: #ffb750;
+  -webkit-text-stroke: 1px;
+  -webkit-text-stroke-color: #4360a8;
+}
+
+.replay-xo-btn {
+  align-self: center;
+  position: relative;
+  text-align: center;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

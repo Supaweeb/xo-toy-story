@@ -2,6 +2,8 @@ import { Component } from 'react'
 import '../style.css'
 import { Container, Row, Col, Button } from 'reactstrap'
 import SettingPage from '../Component/setting'
+import FromReplayPage from '../Component/formReplay.js'
+import axios from 'axios'
 
 class App extends Component {
   constructor (props) {
@@ -14,10 +16,13 @@ class App extends Component {
       turn: 'X',
       table: [...Array(x)].map(e => Array(y).fill(undefined)),
       isEndGame: false,
+      isOverlay: false,
       message: 'Welcome',
       count: 3,
       store: [],
-      ai: false
+      ai: false,
+      formReplayModal: false,
+      activeItem: { name: '', boardSize: {}, gameplay: [] }
     }
   }
 
@@ -34,23 +39,14 @@ class App extends Component {
     this.setState({ size: e }, () => this.gameRestart())
   }
 
-  isEqual = (table1, table2, table3) => {
-    if (table1 === table2 && table1 === table3) {
-      return true
-    }
-    return false
-  }
-
   componentDidUpdate () {
-    this.state.isEndGame
+    this.state.isOverlay
       ? (document.getElementById('overlay').style.display = 'block')
       : (document.getElementById('overlay').style.display = 'none')
   }
 
   toggleOverlay = () => {
-    this.setState({ isEndGame: !this.state.isEndGame }, () =>
-      this.setState({ turn: 'X' })
-    )
+    this.setState({ isOverlay: false }, () => this.setState({ turn: 'X' }))
   }
 
   winnerCondition = checkTable => {
@@ -60,34 +56,66 @@ class App extends Component {
           continue
         }
         try {
-          if (
-            checkTable[i][j] === checkTable[i][j + 1] &&
-            checkTable[i][j] === checkTable[i][j + 2]
-          ) {
+          // horizontal check for winner
+          var winning_stack = 1
+          var compare = checkTable[i][j]
+          for (let stack = 1; stack < this.state.count; stack++) {
+            if (compare === checkTable[i][j + stack]) {
+              winning_stack = winning_stack + 1
+              continue
+            }
+            winning_stack = 1
+          }
+          // check game was ended from case 1 horizontal
+          if (winning_stack === this.state.count) {
             return checkTable[i][j]
           }
-          if (i + 1 > this.state.size.x - 1 || i + 2 > this.state.size.x - 1) {
-            continue
-          } else {
-            if (
-              checkTable[i][j] === checkTable[i + 1][j] &&
-              checkTable[i][j] === checkTable[i + 2][j]
-            ) {
-              return checkTable[i][j]
+          // vertical check for winner
+          for (let stack = 1; stack < this.state.count; stack++) {
+            // check index out of bound break
+            if (i + stack >= this.state.size.x) {
+              winning_stack = 1
+              break
             }
-            if (
-              checkTable[i][j] === checkTable[i + 1][j + 1] &&
-              checkTable[i][j] === checkTable[i + 2][j + 2]
-            ) {
-              return checkTable[i][j]
+            if (compare === checkTable[i + stack][j]) {
+              winning_stack = winning_stack + 1
+              continue
             }
-            if (
-              checkTable[i][j] === checkTable[i + 1][j - 1] &&
-              checkTable[i][j] === checkTable[i + 2][j - 2]
-            ) {
-              return checkTable[i][j]
-            }
+            winning_stack = 1
           }
+          // check game was ended from case 2 vertical
+          if (winning_stack === this.state.count) {
+            return checkTable[i][j]
+          }
+          // diagonal check for winner
+          for (let stack = 1; stack < this.state.count; stack++) {
+            // check index out of bound break
+            if (i + stack >= this.state.size.x) {
+              winning_stack = 1
+              break
+            }
+            if (compare === checkTable[i + stack][j + stack]) {
+              winning_stack = winning_stack + 1
+              continue
+            }
+            winning_stack = 1
+          }
+          // check game was ended from case 3 diagonal
+          if (winning_stack === this.state.count) {
+            return checkTable[i][j]
+          }
+          for (let stack = 1; stack < this.state.count; stack++) {
+            if (compare === checkTable[i - stack][j + stack]) {
+              winning_stack = winning_stack + 1
+              continue
+            }
+            winning_stack = 1
+          }
+          // check game was ended from case 4 diagonal
+          if (winning_stack === this.state.count) {
+            return checkTable[i][j]
+          }
+          
         } catch (error) {
           console.log(error)
         }
@@ -139,7 +167,7 @@ class App extends Component {
       } else if (result === 'X') {
         return scores[result] - depth
       }
-      return scores[result]
+      return 0
     }
 
     if (depth === 1) {
@@ -200,7 +228,7 @@ class App extends Component {
   check = () => {
     let result = this.winnerCondition(this.state.table)
     if (result != null) {
-      this.setState({ isEndGame: true })
+      this.setState({ isEndGame: true, isOverlay: true })
       return this.setState({
         message:
           result === 'draw' ? `Game is ${result}` : `Player ${result} won`
@@ -226,11 +254,30 @@ class App extends Component {
     table = [...Array(this.state.size.x)].map(e =>
       Array(this.state.size.y).fill(undefined)
     )
-    this.setState({ table: table, store: [] })
+    this.setState({ table: table, store: [], isEndGame: false })
+  }
+
+  toggleFormReplayModal = () => {
+    this.setState({ formReplayModal: !this.state.formReplayModal })
+  }
+
+  onSaveReplay = e => {
+    this.toggleFormReplayModal()
+    // this.setState({ size: e }, () => this.gameRestart())
+    let activeItem = this.state.activeItem
+    activeItem.name = e
+    activeItem.boardSize = this.props.size
+    activeItem.gameplay = this.state.store
+    this.setState({ activeItem: activeItem }, () =>
+      axios.post('http://localhost:8000/api/xogames/', activeItem)
+    )
   }
 
   handdleSubmit = () => {
-    console.log(this.state.store)
+    if (this.state.isEndGame) {
+      return this.toggleFormReplayModal()
+    }
+    return alert('Game not over yet')
   }
 
   storeSeqPlay = (i, j, player) => {
@@ -350,6 +397,12 @@ class App extends Component {
           <SettingPage
             toggleSetting={this.toggleSetting}
             onSave={this.onSave}
+          />
+        ) : null}
+        {this.state.formReplayModal ? (
+          <FromReplayPage
+            toggle={this.toggleFormReplayModal}
+            onSave={this.onSaveReplay}
           />
         ) : null}
       </Container>

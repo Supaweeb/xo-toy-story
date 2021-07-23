@@ -3,6 +3,6 @@ from .models import XOGame
 # Register your models here.
 
 class XOGameAdmin(admin.ModelAdmin):
-    list_display = ('id','name')
+    list_display = ('id','name','boardSize','gameplay','date')
 
 admin.site.register(XOGame,XOGameAdmin)

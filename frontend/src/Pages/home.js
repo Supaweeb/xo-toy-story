@@ -1,9 +1,10 @@
 import { Component } from 'react'
 import '../style.css'
-import { Container, Row, Col, Button, Input } from 'reactstrap'
-import GamePage from './game'
+import { Container, Row, Col, Button } from 'reactstrap'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import SettingPage from '../Component/setting'
+import GamePage from './game'
+import GameReplayPage from './saveReplay'
 
 class App extends Component {
   constructor (props) {
@@ -13,7 +14,9 @@ class App extends Component {
       gamePlay: false,
       size: { x: 3, y: 3 },
       ai: false,
-      selectMode: false
+      selectMode: false,
+      homeMenu: true,
+      gameReplay: false
     }
   }
 
@@ -32,6 +35,10 @@ class App extends Component {
     this.setState({ size: e })
   }
 
+  GameReplay = () => {
+    return <GameReplayPage />
+  }
+
   render () {
     return (
       <Router>
@@ -48,17 +55,27 @@ class App extends Component {
           </Row>
           <Row>
             <div className='menu-button'>
-              {!this.state.selectMode && !this.state.gamePlay ? (
+              {/* On home game start home menu is open */}
+              {this.state.homeMenu ? (
                 <Col>
                   <Button
                     className='game-button'
                     size='lg'
                     color='danger'
-                    onClick={() => this.setState({ selectMode: true })}
+                    onClick={() =>
+                      this.setState({ selectMode: true, homeMenu: false })
+                    }
                   >
                     Play game
                   </Button>
-                  <Button className='game-button' size='lg' color='primary'>
+                  <Button
+                    className='game-button'
+                    size='lg'
+                    color='primary'
+                    onClick={() =>
+                      this.setState({ gameReplay: true, homeMenu: false })
+                    }
+                  >
                     Replay
                   </Button>
                   <Button
@@ -82,8 +99,9 @@ class App extends Component {
             </div>
           </Row>
           <Row>
+            {/* On going to play game just want to select game mode player vs player / player vs computer*/}
             {this.state.selectMode && !this.state.gamePlay ? (
-              <Col className="game-mode">
+              <Col className='game-mode'>
                 <Button
                   className='game-button'
                   size='lg'
@@ -103,12 +121,19 @@ class App extends Component {
               </Col>
             ) : null}
           </Row>
-          {this.state.gamePlay  ? (
+
+          <Row>
+            {/* On game replay */}
+            {this.state.gameReplay ? <GameReplayPage /> : null}
+          </Row>
+          {/* On selected mode go to game board*/}
+          {this.state.gamePlay ? (
             <Row>
               <GamePage size={this.state.size} ai={this.state.ai} />
             </Row>
           ) : null}
         </Container>
+        {/* On selected setting for change size of board */}
         {this.state.settingModal ? (
           <SettingPage
             toggleSetting={this.toggleSetting}
