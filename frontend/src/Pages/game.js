@@ -58,7 +58,7 @@ class App extends Component {
           // horizontal check for winner
           var winning_stack = 1
           var compare = checkTable[i][j]
-          for (let stack = 1; stack < this.state.count; stack++) {
+          for (let stack = 1; stack < this.state.activeItem.winInRow; stack++) {
             if (compare === checkTable[i][j + stack]) {
               winning_stack = winning_stack + 1
               continue
@@ -66,11 +66,11 @@ class App extends Component {
             winning_stack = 1
           }
           // check game was ended from case 1 horizontal
-          if (winning_stack === this.state.count) {
+          if (winning_stack === this.state.activeItem.winInRow) {
             return checkTable[i][j]
           }
           // vertical check for winner
-          for (let stack = 1; stack < this.state.count; stack++) {
+          for (let stack = 1; stack < this.state.activeItem.winInRow; stack++) {
             // check index out of bound break
             if (i + stack >= this.state.size.x) {
               winning_stack = 1
@@ -83,11 +83,11 @@ class App extends Component {
             winning_stack = 1
           }
           // check game was ended from case 2 vertical
-          if (winning_stack === this.state.count) {
+          if (winning_stack === this.state.activeItem.winInRow) {
             return checkTable[i][j]
           }
           // diagonal check for winner
-          for (let stack = 1; stack < this.state.count; stack++) {
+          for (let stack = 1; stack < this.state.activeItem.winInRow; stack++) {
             // check index out of bound break
             if (i + stack >= this.state.size.x) {
               winning_stack = 1
@@ -100,10 +100,10 @@ class App extends Component {
             winning_stack = 1
           }
           // check game was ended from case 3 diagonal
-          if (winning_stack === this.state.count) {
+          if (winning_stack === this.state.activeItem.winInRow) {
             return checkTable[i][j]
           }
-          for (let stack = 1; stack < this.state.count; stack++) {
+          for (let stack = 1; stack < this.state.activeItem.winInRow; stack++) {
             if (i - stack < 0) {
               winning_stack = 1
               break
@@ -115,7 +115,7 @@ class App extends Component {
             winning_stack = 1
           }
           // check game was ended from case 4 diagonal
-          if (winning_stack === this.state.count) {
+          if (winning_stack === this.state.activeItem.winInRow) {
             return checkTable[i][j]
           }
         } catch (error) {
