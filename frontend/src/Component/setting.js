@@ -33,7 +33,11 @@ class App extends Component {
       return this.setState({ size: size })
     }
     if (e.target.name === 'winCondition') {
-      return this.setState({ winCondition: Number(e.target.value) })
+      let max = Math.max(this.state.size.x, this.state.size.y)
+      if (Number(e.target.value) <= max) {
+        return this.setState({ winCondition: Number(e.target.value) })
+      }
+      return this.setState({ winCondition: 3 })
     }
   }
 
@@ -42,7 +46,7 @@ class App extends Component {
   }
 
   handdleSave = () => {
-    this.props.onSave(this.state.size,this.state.winCondition)
+    this.props.onSave(this.state.size, this.state.winCondition)
   }
 
   render () {
@@ -88,7 +92,7 @@ class App extends Component {
               <br />
               <FormGroup row>
                 <Label for='exampleEmail' sm={4} size='lg'>
-                  Win in a row
+                  Number of crosses
                 </Label>
                 <Col sm={8}>
                   <Input

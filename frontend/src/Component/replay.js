@@ -26,8 +26,8 @@ class App extends Component {
 
   componentDidUpdate () {
     this.state.isOverlay
-      ? (document.getElementById('overlay').style.display = 'block')
-      : (document.getElementById('overlay').style.display = 'none')
+      ? (document.getElementById('overlay-replay').style.display = 'block')
+      : (document.getElementById('overlay-replay').style.display = 'none')
   }
 
   toggleOverlay = () => {
@@ -169,7 +169,7 @@ class App extends Component {
           ? xoTable.push(
               <Button
                 className='xo-button'
-                color='info'
+                color='primary'
                 style={{
                   width: h / this.state.activeItem.boardSize.x,
                   height: h / this.state.activeItem.boardSize.y
@@ -182,7 +182,7 @@ class App extends Component {
           ? xoTable.push(
               <Button
                 className='xo-button'
-                color='warning'
+                color='danger'
                 style={{
                   width: h / this.state.activeItem.boardSize.x,
                   height: h / this.state.activeItem.boardSize.y
@@ -194,7 +194,6 @@ class App extends Component {
           : xoTable.push(
               <Button
                 className='xo-button'
-                outline
                 color='secondary'
                 style={{
                   width: h / this.state.activeItem.boardSize.x,
@@ -232,7 +231,10 @@ class App extends Component {
           </ModalFooter>
           <Row>
             <Col>
-              <div id='overlay' onClick={() => this.toggleOverlay()}>
+              <div
+                id='overlay-replay'
+                onClick={() => this.toggleOverlay()}
+              >
                 {this.state.message}
               </div>
             </Col>

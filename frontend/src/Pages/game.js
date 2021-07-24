@@ -21,7 +21,12 @@ class App extends Component {
       store: [],
       ai: false,
       formReplayModal: false,
-      activeItem: { name: '', boardSize: {},winInRow:props.winCondition, gameplay: [] }
+      activeItem: {
+        name: '',
+        boardSize: {},
+        winInRow: props.winCondition,
+        gameplay: []
+      }
     }
   }
 
@@ -55,6 +60,7 @@ class App extends Component {
           continue
         }
         try {
+          console.log(checkTable)
           // horizontal check for winner
           var winning_stack = 1
           var compare = checkTable[i][j]
@@ -293,12 +299,12 @@ class App extends Component {
     let h = window.innerHeight / 2
     let xoTable = []
     for (let index = 0; index < this.state.size.x; index++) {
-      for (let jindex = 0; jindex < this.state.size.y; jindex++) {        
+      for (let jindex = 0; jindex < this.state.size.y; jindex++) {
         this.state.table[index][jindex] === 'X'
           ? xoTable.push(
               <Button
                 className='xo-button'
-                color='info'
+                color='primary'
                 style={{
                   width: h / this.state.size.x,
                   height: h / this.state.size.x
@@ -312,7 +318,7 @@ class App extends Component {
           ? xoTable.push(
               <Button
                 className='xo-button'
-                color='warning'
+                color='danger'
                 style={{
                   width: h / this.state.size.x,
                   height: h / this.state.size.x
@@ -325,7 +331,7 @@ class App extends Component {
           : xoTable.push(
               <Button
                 className='xo-button'
-                outline
+                // outline
                 color='secondary'
                 style={{
                   width: h / this.state.size.x,
@@ -350,14 +356,14 @@ class App extends Component {
           <Col>
             <div className='footer-ingame-menu'>
               <Button
-                color='primary'
+                color='info'
                 size='lg'
                 onClick={() => (window.location.pathname = '/')}
               >
                 Menu
               </Button>
               <Button
-                color='danger'
+                color='warning'
                 size='lg'
                 onClick={() => this.gameRestart()}
               >

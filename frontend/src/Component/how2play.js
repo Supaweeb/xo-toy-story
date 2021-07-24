@@ -48,7 +48,7 @@ class App extends Component {
               </p>
               <p className='how2play-text'>
                 4. When all board point are full, the game is over. If no player
-                has 3 marks in a row{' '}
+                has 3 number of crosses{' '}
                 <mark>(or something as you setting in 3.)</mark> ,the game ends
                 in a draw. <br />
               </p>
