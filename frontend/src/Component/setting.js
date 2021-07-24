@@ -17,7 +17,8 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      size: { x: 3, y: 3 }
+      size: { x: 3, y: 3 },
+      winCondition: 3
     }
   }
 
@@ -31,6 +32,9 @@ class App extends Component {
       size.y = Number(e.target.value)
       return this.setState({ size: size })
     }
+    if (e.target.name === 'winCondition') {
+      return this.setState({ winCondition: Number(e.target.value) })
+    }
   }
 
   handdleCancal = () => {
@@ -38,7 +42,7 @@ class App extends Component {
   }
 
   handdleSave = () => {
-    this.props.onSave(this.state.size)
+    this.props.onSave(this.state.size,this.state.winCondition)
   }
 
   render () {
@@ -77,6 +81,23 @@ class App extends Component {
                     min={3}
                     bsSize='lg'
                     value={this.state.size.y}
+                    onChange={this.handdleChange}
+                  />
+                </Col>
+              </FormGroup>
+              <br />
+              <FormGroup row>
+                <Label for='exampleEmail' sm={4} size='lg'>
+                  Win in a row
+                </Label>
+                <Col sm={8}>
+                  <Input
+                    type='number'
+                    name='winCondition'
+                    placeholder={'Not less than 3'}
+                    min={3}
+                    bsSize='lg'
+                    value={this.state.winCondition}
                     onChange={this.handdleChange}
                   />
                 </Col>

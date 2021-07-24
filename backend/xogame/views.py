@@ -7,4 +7,4 @@ from .models import XOGame
 
 class XOGameView(viewsets.ModelViewSet):
     serializer_class = XOGameSerializer
-    queryset = XOGame.objects.all()
+    queryset = XOGame.objects.all().order_by('date').reverse()

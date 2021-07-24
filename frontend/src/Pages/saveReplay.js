@@ -30,26 +30,16 @@ class App extends Component {
     this.refreshList()
   }
 
-  componentDidUpdate () {
-    console.log(this.state.currentNavigation)
-  }
-
   refreshList = () => {
     axios.get('http://localhost:8000/api/xogames/').then(res =>
       this.setState({
         list: res.data.filter(
           item =>
-            item.name.toUpperCase().includes(this.state.search) ||
-            item.name.toLowerCase().includes(this.state.search)
+            item.name.toUpperCase().includes(this.state.search.toUpperCase()) ||
+            item.name.toLowerCase().includes(this.state.search.toLowerCase())
         )
       })
     )
-    // .filter(item => {
-    //   return item.name.includes(this.state.search) ? item : null
-    // })
-    // .map(item =>
-    //   this.setState({ list: item }, () => console.log(this.state.list))
-    // )
   }
 
   toggle = () => {
@@ -61,15 +51,38 @@ class App extends Component {
   }
 
   handdleChange = e => {
-    this.setState({ search: e.target.value }, () => this.refreshList())
+    this.setState({ search: e.target.value,currentNavigation:1 }, () => this.refreshList())
+  }
+
+  handdleClick = e => {
+    if (e.target.name === 'first') {
+      return this.setState({ currentNavigation: 1 })
+    } else if (e.target.name === 'prev') {
+      return this.setState({
+        currentNavigation: this.state.currentNavigation - 1
+      })
+    } else if (e.target.name === 'next') {
+      return this.setState({
+        currentNavigation: this.state.currentNavigation + 1
+      })
+    } else if (e.target.name === 'last') {
+      return this.setState({
+        currentNavigation: Math.ceil(this.state.list.length / 5)
+      })
+    }
+    return this.setState({
+      currentNavigation: Number(e.target.name)
+    })
   }
 
   renderPagination = () => {
     let pagination = []
     for (let i = 1; i <= Math.ceil(this.state.list.length / 5); i++) {
       pagination.push(
-        <PaginationItem>
-          <PaginationLink>{i}</PaginationLink>
+        <PaginationItem key={i}>
+          <PaginationLink name={i} onClick={this.handdleClick}>
+            {i}
+          </PaginationLink>
         </PaginationItem>
       )
     }
@@ -78,7 +91,10 @@ class App extends Component {
 
   renderItem () {
     return this.state.list
-      .filter((data, index) => index + 1 === this.state.currentNavigation)
+      .filter(
+        (data, index) =>
+          Math.ceil((index + 1) / 5) === this.state.currentNavigation
+      )
       .map((data, index) => (
         <tr key={index}>
           <td className='tbody-column'>{data.name}</td>
@@ -109,7 +125,7 @@ class App extends Component {
                 name='search'
                 placeholder='search by name'
                 onChange={this.handdleChange}
-                style={{ marginLeft: '10px', textAlign: 'center' }}
+                style={{ marginLeft: '10px', textAlign: 'center'}}
               />
             </div>
           </Col>
@@ -118,56 +134,51 @@ class App extends Component {
           <Col>
             <Table className='table-replay' bordered hover>
               <thead>
-                <tr>
-                  <th className='thead-column'>Name</th>
-                  <th className='thead-column'>Replay</th>
-                </tr>
+                {this.state.list.length === 0 ? null : (
+                  <tr>
+                    <th className='thead-column'>Name</th>
+                    <th className='thead-column'>Replay</th>
+                  </tr>
+                )}
               </thead>
               <tbody>{this.renderItem()}</tbody>
             </Table>
             <div className='navigation'>
               <Pagination aria-label='Page navigation example'>
-                <PaginationItem>
-                  <PaginationLink
-                    onClick={() => this.setState({ currentNavigation: 1 })}
-                  >
-                    {'<<'}
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    onClick={() =>
-                      this.setState({
-                        currentNavigation: this.state.currentNavigation - 1
-                      })
-                    }
-                  >
-                    {'<'}
-                  </PaginationLink>
-                </PaginationItem>
-                {this.renderPagination()}
-                <PaginationItem>
-                  <PaginationLink
-                    onClick={() =>
-                      this.setState({
-                        currentNavigation: this.state.currentNavigation + 1
-                      })
-                    }
-                  >
-                    {'>'}
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    onClick={() =>
-                      this.setState({
-                        currentNavigation: Math.ceil(this.state.list.length / 5)
-                      })
-                    }
-                  >
-                    {'>>'}
-                  </PaginationLink>
-                </PaginationItem>
+                {this.state.currentNavigation > 1 ? (
+                  <PaginationItem>
+                    <PaginationLink name='first' onClick={this.handdleClick}>
+                      {'<<'}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : null}
+                {this.state.currentNavigation > 1 ? (
+                  <PaginationItem>
+                    <PaginationLink name='prev' onClick={this.handdleClick}>
+                      {'<'}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : null}
+
+                {Math.ceil(this.state.list.length / 5) === 1
+                  ? null
+                  : this.renderPagination()}
+                {this.state.currentNavigation <
+                Math.ceil(this.state.list.length / 5) ? (
+                  <PaginationItem>
+                    <PaginationLink name='next' onClick={this.handdleClick}>
+                      {'>'}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : null}
+                {this.state.currentNavigation <
+                Math.ceil(this.state.list.length / 5) ? (
+                  <PaginationItem>
+                    <PaginationLink name='next' onClick={this.handdleClick}>
+                      {'>>'}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : null}
               </Pagination>
             </div>
           </Col>

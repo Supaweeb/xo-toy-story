@@ -170,8 +170,8 @@
   margin: 10px;
   position: relative;
   display: flex;
-  text-align: center;
   bottom: 50px;
+  width: 575px;
 }
 
 .tbody-column {
@@ -201,4 +201,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.how2play-text {
+  font-size: 20px;
+  margin: 20px;
+  font-weight: normal;
 }

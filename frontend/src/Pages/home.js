@@ -1,8 +1,9 @@
 import { Component } from 'react'
 import '../style.css'
 import { Container, Row, Col, Button } from 'reactstrap'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import SettingPage from '../Component/setting'
+import How2playPage from '../Component/how2play'
 import GamePage from './game'
 import GameReplayPage from './saveReplay'
 
@@ -10,29 +11,36 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      // modal
       settingModal: false,
+      how2playModal: false,
+      // page state
       gamePlay: false,
-      size: { x: 3, y: 3 },
-      ai: false,
       selectMode: false,
       homeMenu: true,
-      gameReplay: false
+      gameReplay: false,
+      // send parameter to game play
+      size: { x: 3, y: 3 },
+      ai: false,
+      winCondition: 3
     }
   }
 
-  componentDidUpdate () {}
-
   toggleSetting = () => {
     this.setState({ settingModal: !this.state.settingModal })
+  }
+
+  toggleHow2Play = () => {
+    this.setState({ how2playModal: !this.state.how2playModal })
   }
 
   onSelectMode = e => {
     this.setState({ ai: e, gamePlay: true })
   }
 
-  onSave = e => {
+  onSave = (size, win) => {
     this.toggleSetting()
-    this.setState({ size: e })
+    this.setState({ size: size, winCondition: win })
   }
 
   GameReplay = () => {
@@ -80,9 +88,9 @@ class App extends Component {
                   </Button>
                   <Button
                     className='game-button'
-                    href='/'
                     size='lg'
                     color='primary'
+                    onClick={() => this.toggleHow2Play()}
                   >
                     How to play
                   </Button>
@@ -129,7 +137,11 @@ class App extends Component {
           {/* On selected mode go to game board*/}
           {this.state.gamePlay ? (
             <Row>
-              <GamePage size={this.state.size} ai={this.state.ai} />
+              <GamePage
+                size={this.state.size}
+                ai={this.state.ai}
+                winCondition={this.state.winCondition}
+              />
             </Row>
           ) : null}
         </Container>
@@ -140,6 +152,8 @@ class App extends Component {
             onSave={this.onSave}
           />
         ) : null}
+        {/* On selected how to play game */}
+        {this.state.how2playModal ? <How2playPage toggle={this.toggleHow2Play} /> : null}
       </Router>
     )
   }

@@ -18,11 +18,10 @@ class App extends Component {
       isEndGame: false,
       isOverlay: false,
       message: 'Welcome',
-      count: 3,
       store: [],
       ai: false,
       formReplayModal: false,
-      activeItem: { name: '', boardSize: {}, gameplay: [] }
+      activeItem: { name: '', boardSize: {},winInRow:props.winCondition, gameplay: [] }
     }
   }
 
@@ -105,6 +104,10 @@ class App extends Component {
             return checkTable[i][j]
           }
           for (let stack = 1; stack < this.state.count; stack++) {
+            if (i - stack < 0) {
+              winning_stack = 1
+              break
+            }
             if (compare === checkTable[i - stack][j + stack]) {
               winning_stack = winning_stack + 1
               continue
@@ -115,7 +118,6 @@ class App extends Component {
           if (winning_stack === this.state.count) {
             return checkTable[i][j]
           }
-          
         } catch (error) {
           console.log(error)
         }
@@ -291,7 +293,7 @@ class App extends Component {
     let h = window.innerHeight / 2
     let xoTable = []
     for (let index = 0; index < this.state.size.x; index++) {
-      for (let jindex = 0; jindex < this.state.size.y; jindex++) {
+      for (let jindex = 0; jindex < this.state.size.y; jindex++) {        
         this.state.table[index][jindex] === 'X'
           ? xoTable.push(
               <Button
@@ -302,7 +304,6 @@ class App extends Component {
                   height: h / this.state.size.x
                 }}
                 onClick={() => this.handdleClick(index, jindex)}
-                key={`${index}${jindex}`}
               >
                 {this.state.table[index][jindex]}
               </Button>
@@ -317,7 +318,6 @@ class App extends Component {
                   height: h / this.state.size.x
                 }}
                 onClick={() => this.handdleClick(index, jindex)}
-                key={`${index}${jindex}`}
               >
                 {this.state.table[index][jindex]}
               </Button>
@@ -333,7 +333,6 @@ class App extends Component {
                 }}
                 disabled={this.state.isEndGame}
                 onClick={() => this.handdleClick(index, jindex)}
-                key={`${index}${jindex}`}
               >
                 {this.state.table[index][jindex]}
               </Button>
