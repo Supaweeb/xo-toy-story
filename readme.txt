@@ -1,10 +1,16 @@
 ### Setup step ###
 
-In the backend directory, you can run:
+In the backend directory (cd ./backend), you can run:
+### `python -m pip install Django`
+to install Django
+
+### pip install djangorestframework django-cors-headers`
+to install djangorestframework django-cors-headers for this project
+
 ### `python manage.py runserver`
 To run server open http://localhost:8000/admin to view backend as admin
 
-In the fontend directory, you can run:
+In the fontend directory (cd ./fontend), you can run:
 
 ### `npm install`
 For install module library in this app
@@ -19,8 +25,9 @@ Open http://localhost:3000 to view it in the browser
 
 ### Application design ###
 The application is XO game (Tic tae toe game)
-Backend : Django
 Fontend : ReactJS JS CSS Reactstrap
+Backend : Django
+Database : SQLite3
 Computer : Using minimax and alpha beta pruning to find
 which way computer should make the move
 API : Axios to GET POST data

@@ -126,6 +126,14 @@ class App extends Component {
                 >
                   Player vs Computer
                 </Button>
+                <Button
+                  color='danger'
+                  className='game-button'
+                  size='lg'
+                  onClick={() => (window.location.pathname = '/')}
+                >
+                  Back
+                </Button>
               </Col>
             ) : null}
           </Row>
@@ -153,7 +161,9 @@ class App extends Component {
           />
         ) : null}
         {/* On selected how to play game */}
-        {this.state.how2playModal ? <How2playPage toggle={this.toggleHow2Play} /> : null}
+        {this.state.how2playModal ? (
+          <How2playPage toggle={this.toggleHow2Play} />
+        ) : null}
       </Router>
     )
   }
