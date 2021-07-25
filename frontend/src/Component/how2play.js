@@ -44,13 +44,23 @@ class App extends Component {
               <p className='how2play-text'>
                 3. The first player to get 3 of her marks in a row{' '}
                 <mark>(up, down, across, or diagonally)</mark> is the winner
-                <mark>(You can change it to other by setting on setting menu)</mark>. <br />
+                <mark>
+                  (You can change it to other by setting on setting menu)
+                </mark>
+                . <br />
               </p>
               <p className='how2play-text'>
                 4. When all board point are full, the game is over. If no player
                 has 3 number of crosses{' '}
                 <mark>(or something as you setting in 3.)</mark> ,the game ends
                 in a draw. <br />
+              </p>
+              <p className='how2play-text'>
+                5. When game is over you can save your name and game replay to
+                watch it later <br />
+              </p>
+              <p className='how2play-text'>
+                6. By replay menu you can search replay by name <br />
               </p>
             </Form>
           </ModalBody>
